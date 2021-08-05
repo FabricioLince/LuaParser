@@ -3,8 +3,9 @@ local Select = require "parser/select"
 local Sequence = require "parser/sequence"
 local Multiple = require "parser/multiple"
 local discard = require "parser/discard"
-local token = require "tokens"
-local expr = require "expression"
+
+local token = require "bhv/rules/tokens"
+local expr = require "bhv/rules/expression"
 
 local var_access = Sequence("var_access", {
 	token.name,

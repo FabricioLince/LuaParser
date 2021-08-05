@@ -1,5 +1,5 @@
 
-local Datatable = require "Datatable"
+local Datatable = require "bhv/Datatable"
 eval = {}
 
 

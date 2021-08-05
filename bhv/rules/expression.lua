@@ -1,12 +1,12 @@
 
-local Patternrule = require "parser/pattern"
 local Select = require "parser/select"
 local Sequence = require "parser/sequence"
 local Multiple = require "parser/multiple"
 local Optional = require "parser/optional"
 local discard = require "parser/discard"
-local utils = require "utils"
-local token = require "tokens"
+local CheckPoint = require "parser/CheckPoint"
+local utils = require "bhv/utils"
+local token = require "bhv/rules/tokens"
 
 local value = Select{
 	token.real,
@@ -29,6 +29,7 @@ local multiplication = Sequence("multiplication", {
 	Multiple("ops", 0,
 		Sequence("mult_operation", {
 			token.symbol({"*", "/", "%"}),
+			CheckPoint(),
 			value
 		})
 	)
@@ -41,6 +42,7 @@ Sequence("addition", {
 	Multiple("ops", 0,
 		Sequence("addition_op", {
 			token.symbol({"+","-"}),
+			CheckPoint(),
 			multiplication
 		})
 	)
@@ -51,6 +53,7 @@ local comparation = Sequence("comparation", {
 	Optional("ops",
 		Sequence("comparator", {
 			token.symbol{">=", ">", "<=", "<", "=="},
+			CheckPoint(),
 			addition
 		})
 	)
@@ -65,6 +68,7 @@ local expression = Sequence("expression", {
 				token.reserved("or"),
 				token.symbol{"&", "|"},
 			},
+			CheckPoint(),
 			comparation
 		})
 	)
@@ -73,9 +77,11 @@ local expression = Sequence("expression", {
 
 value:add_rule(
 	Sequence("parentheses", {
-		Patternrule("%("),
+		discard(token.symbol("(")),
+		CheckPoint(),
 		expression,
-		Patternrule("%)"),
+		CheckPoint(") expected"),
+		discard(token.symbol(")")),
 	})
 )
 
@@ -83,9 +89,11 @@ value:add_rule(
 value:add_rule(
 	Sequence("list", {
 		discard(token.symbol("{")),
+		CheckPoint(),
 		Multiple("items", 0,
 			expression
 		),
+		CheckPoint("} expected"),
 		discard(token.symbol("}"))
 	})
 )

@@ -7,10 +7,9 @@ local Optional = require "parser/optional"
 local discard = require "parser/discard"
 local CheckPoint = require "parser/CheckPoint"
 
-local utils = require "utils"
 
-local token = require "tokens"
-local cmds = require "cmds"
+local token = require "bhv/rules/tokens"
+local cmds = require "bhv/rules/cmds"
 
 
 local behaviour_def = Sequence("behaviour_def", {

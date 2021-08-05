@@ -6,10 +6,10 @@ local Multiple = require "parser/multiple"
 local Optional = require "parser/optional"
 local discard = require "parser/discard"
 local CheckPoint = require "parser/CheckPoint"
-local token = require "tokens"
-local expr = require "expression"
+local token = require "bhv/rules/tokens"
+local expr = require "bhv/rules/expression"
 local expression = expr.expression
-local var_access = require "var_access"
+local var_access = require "bhv/rules/var_access"
 
 
 local attr = Sequence("attr", {
@@ -45,7 +45,7 @@ local behaviour_call = Sequence("behaviour_call", {
 })
 expr.value:add_rule(behaviour_call, 2)
 
-local behaviour_call = Sequence("behaviour_call", {
+local behaviour_call_explicit = Sequence("behaviour_call", {
 	discard(token.symbol(":")),
 	token.name,
 	CheckPoint(),
@@ -58,7 +58,7 @@ local behaviour_call = Sequence("behaviour_call", {
 		})
 	)
 })
-expr.value:add_rule(behaviour_call, 2)
+expr.value:add_rule(behaviour_call_explicit, 2)
 
 local cmd = Select{
 	attr,

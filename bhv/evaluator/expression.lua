@@ -1,6 +1,6 @@
 
-local StringObj = require "evaluator/string_obj"
-local List = require "evaluator/list_obj"
+local StringObj = require "bhv/evaluator/string_obj"
+local List = require "bhv/evaluator/list_obj"
 
 local eval = {}
 
